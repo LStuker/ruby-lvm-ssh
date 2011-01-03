@@ -8,21 +8,23 @@ module LVM
 
         attr_reader :attributes
         attr_reader :command
+        attr_reader :server
 
         def initialize(options)
           @attributes = Attributes.load(options[:version], ATTRIBUTES_FILE)
           @command = "#{options[:command]} #{Reporting.build_command(attributes, BASE_COMMAND)}"
+          @server = options[:server]
         end
 
         BASE_COMMAND = "pvs #{Reporting::BASE_ARGUMENTS}"
         ATTRIBUTES_FILE = 'pvs.yaml'
-    
+
         # pv_attr attribute handling constants
         # roughly by order referenced in lib/report/report.c:360 (_pvstatus_disp)
         #
         ALLOCATABLE = {
           # code says its a boolean
-          'a' => true 
+          'a' => true
         }
         EXPORTED = {
           # code says its a boolean
@@ -30,7 +32,7 @@ module LVM
         }
 
         def list
-          output = External.cmd(@command)
+          output = External.cmd(@server,@command)
           data = parse(output)
           if block_given?
             return data.each { |obj| yield obj }
@@ -43,11 +45,11 @@ module LVM
 
           def parse_pv_attr(pv_attr) #:nodoc:
             translated = {}
-            # translate them into nice symbols and a couple booleans 
+            # translate them into nice symbols and a couple booleans
             translated[:allocatable] = ALLOCATABLE[pv_attr[0].chr] ? true : false
             translated[:exported] = EXPORTED[pv_attr[1].chr] ? true : false
 
-            return translated 
+            return translated
           end
 
           # Parses the output of self.command
@@ -73,12 +75,12 @@ module LVM
                 volumes << volume
               end
             end
-  
+
             return volumes
           end # parse
-          
+
       end # class PVS
     end # module Wrapper
-end # module LVM 
+end # module LVM
 
 

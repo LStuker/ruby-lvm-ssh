@@ -9,17 +9,19 @@ module LVM
 
       attr_reader :attributes
       attr_reader :command
+      attr_reader :server
 
       def initialize(options)
         @attributes = Attributes.load(options[:version], ATTRIBUTES_FILE)
         @command = "#{options[:command]} #{Reporting.build_command(attributes, BASE_COMMAND)}"
+        @server = options[:server]
       end
 
       BASE_COMMAND = "pvs #{Reporting::BASE_ARGUMENTS}"
       ATTRIBUTES_FILE = 'pvsseg.yaml'
  
       def list
-        output = External.cmd(@command)
+        output = External.cmd(@server,@command)
         data = parse(output)
         if block_given?
           return data.each { |obj| yield obj }
