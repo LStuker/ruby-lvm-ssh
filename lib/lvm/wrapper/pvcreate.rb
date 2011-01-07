@@ -7,25 +7,25 @@ module LVM
       # Create a LVM Physical Volume out of a device
       # if fdisk does not find a partition on the disk and
       # if pvscan does not find an existing physical volume label
-      def pvcreate(device)
+      def pvcreate(devicename)
 
-        if checkDeviceOnPartition(device)
-          if checkDeviceOnPV(device)
-            External.cmd(@server, "#{@command} pvcreate #{device}")
+        if checkDeviceOnPartition(devicename)
+          if checkDeviceOnPV(devicename)
+            External.cmd(@server, "#{@command} pvcreate #{devicename}")
           end
         end
 
       end
 
       # Check with pvscan if there is a lvm label on the device
-      def checkDeviceOnPV(device)
-        External.cmd(@server, "#{@command} pvscan #{device}").include? "No matching physical volumes found"
+      def checkDeviceOnPV(devicename)
+        External.cmd(@server, "#{@command} pvscan #{devicename}").include? "No matching physical volumes found"
       end
       module_function :checkDeviceOnPV
 
       # Check with fdsik if there is a partition on the device
-      def checkDeviceOnPartition(device)
-        External.cmd(@server, "/usr/bin/sudo /sbin/fdisk -l #{device}").include? "Disk #{device} doesn't contain a valid partition table"
+      def checkDeviceOnPartition(devicename)
+        External.cmd(@server, "/usr/bin/sudo /sbin/fdisk -l #{devicename}").include? "Disk #{devicename} doesn't contain a valid partition table"
       end
       module_function :checkDeviceOnPartition
 
