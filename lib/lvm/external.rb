@@ -4,29 +4,31 @@ require 'net_client'
 
 module LVM
   module External
-    class ExternalFailure < RuntimeError; end
+    class ExternalFailure < RuntimeError;
+    end
 
-    def cmd(server,cmd)
+    def cmd(server, cmd)
 
       if server != 'localhost'
-          ssh_user = AppConfig.ssh_user
-          ssh_key = AppConfig.ssh_key
-          cmd = "ssh -q -t -t -l #{ssh_user} #{server} '#{cmd}'"
+        ssh_user = AppConfig.ssh_user
+        ssh_key  = AppConfig.ssh_key
+        cmd      = "ssh -q -t -t -l #{ssh_user} #{server} '#{cmd}'"
 #cmd = "ssh -q -t -t -l #{ssh_user} -i #{ssh_key} #{server} '#{cmd}'"
         #connection = NetClient.new
-          #return connection.cmd(server,cmd)
+        #return connection.cmd(server,cmd)
 
       end
 
 
       output = []
-      error = nil
-      stat = Open4.popen4(cmd) do |pid, stdin, stdout, stderr|
-          while line = stdout.gets
-            output << line
-            puts output
-          end
-          error = stderr.read.strip
+      error  = nil
+      stat   = Open4.popen4(cmd) do |pid, stdin, stdout, stderr|
+        #while line = stdout.gets
+        #  output << line
+        #  puts output
+        #end
+        output = stdout.read.strip
+        error  = stderr.read.strip
       end
 
       if stat.exited?
@@ -39,14 +41,15 @@ module LVM
         raise ExternalFailure, "Fatal error, `#{cmd}` got signal #{stat.stopsig} and is stopped"
       end
 
-      if block_given?
-
-        return output.each { |l| yield l }
-      else
-        return output.join
-      end
+      return output
+#      if block_given?
+#        return output.each { |l| yield l }
+#      else
+#        return output.join
+#      end
 
     end
+
     module_function :cmd
 
   end # module External
