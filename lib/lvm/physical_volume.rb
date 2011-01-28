@@ -1,5 +1,6 @@
 require 'ostruct'
 
 module LVM
-  class PhysicalVolume < OpenStruct; end
+  class PhysicalVolume < OpenStruct;
+  end
 end

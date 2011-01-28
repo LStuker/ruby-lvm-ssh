@@ -7,10 +7,10 @@ $: << File.dirname(__FILE__) + "/../lib"
 
 require 'lvm'
 
-vol = "sys.vg/tmp.lv"
+vol  = "sys.vg/tmp.lv"
 snap = "demo_snap"
 
-lvm = LVM::LVM.new(:command => "/usr/bin/sudo /sbin/lvm")
+lvm  = LVM::LVM.new(:command => "/usr/bin/sudo /sbin/lvm")
 
 if lvm.logical_volumes[snap]
   puts "#{snap} exists! Remove it"

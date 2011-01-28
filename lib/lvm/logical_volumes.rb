@@ -10,27 +10,27 @@ module LVM
     include Wrapper
 
     def initialize(options)
-      @lvs = LVS.new(options)
+      @lvs    = LVS.new(options)
       @lvsseg = LVSSEG.new(options)
     end
 
     # Gather all information about logical volumes.
     #
     # See VolumeGroups.each for a better representation of LVM data.
-    def each 
-      lvs = @lvs.list
-      lvsseg = @lvsseg.list 
+    def each
+      lvs    = @lvs.list
+      lvsseg = @lvsseg.list
 
       lvs.each do |lv|
         lv.segments ||= []
         lvsseg.each do |lvseg|
-          if lvseg.lv_uuid == lv.uuid 
+          if lvseg.lv_uuid == lv.uuid
             lv.segments << lvseg
           end
         end
-      end          
+      end
 
-      return lvs.each {|l| yield l}
+      return lvs.each { |l| yield l }
     end
   end
 

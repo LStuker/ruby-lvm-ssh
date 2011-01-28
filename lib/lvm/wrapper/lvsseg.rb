@@ -13,47 +13,47 @@ module LVM
 
       def initialize(options)
         @attributes = Attributes.load(options[:version], ATTRIBUTES_FILE)
-        @command = "#{options[:command]} #{Reporting.build_command(attributes, BASE_COMMAND)}"
-        @server = options[:server]
+        @command    = "#{options[:command]} #{Reporting.build_command(attributes, BASE_COMMAND)}"
+        @server     = options[:server]
       end
 
-      BASE_COMMAND = "lvs #{Reporting::BASE_ARGUMENTS}"
+      BASE_COMMAND    = "lvs #{Reporting::BASE_ARGUMENTS}"
       ATTRIBUTES_FILE = 'lvsseg.yaml'
 
       def list
-        output = External.cmd(@server,@command)
-        data = parse(output)
+        output = External.cmd(@server, @command)
+        data   = parse(output)
         if block_given?
           return data.each { |obj| yield obj }
         else
           return data
         end
       end
-  
+
       private
 
-        # Parses the output of self.command
-        def parse(output)
-          volumes = []
+      # Parses the output of self.command
+      def parse(output)
+        volumes = []
 
-          output.split("\n").each do |line|
-            args = process_line(attributes, line)
+        output.split("\n").each do |line|
+          args          = process_line(attributes, line)
 
-            args[:finish] = args[:start] + args[:size]
+          args[:finish] = args[:start] + args[:size]
 
-            # finally build our object
-            volume = LogicalVolumeSegment.new(args)
+          # finally build our object
+          volume        = LogicalVolumeSegment.new(args)
 
-            if block_given?
-              yield volume
-            else
-              volumes << volume
-            end
+          if block_given?
+            yield volume
+          else
+            volumes << volume
           end
-  
-          return volumes
-        end # parse
-        
+        end
+
+        return volumes
+      end # parse
+
     end # class LVSSEG 
   end # module Wrapper
 end # module LVM 

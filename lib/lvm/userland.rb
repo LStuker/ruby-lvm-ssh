@@ -1,5 +1,6 @@
 require 'ostruct'
 
 module LVM
-  class UserLand < OpenStruct; end
+  class UserLand < OpenStruct;
+  end
 end
