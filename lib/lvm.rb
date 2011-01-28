@@ -1,10 +1,12 @@
 require 'lvm/external'
 require 'lvm/userland'
-require 'lvm/logical_volumes'
-require 'lvm/volume_groups'
+require 'lvm/disks'
 require 'lvm/physical_volumes'
+require 'lvm/volume_groups'
+require 'lvm/logical_volumes'
 require 'lvm/wrapper/pvcreate'
 require 'lvm/wrapper/pvremove'
+
 
 
 module LVM
@@ -12,14 +14,16 @@ module LVM
 
   class LVM
 
-    include Wrapper::PVCreate
-    include Wrapper::PVRemove
+    include Wrapper::PVcreate
+    include Wrapper::PVremove
+
 
     attr_reader :command
     attr_reader :server
     attr_reader :logical_volumes
     attr_reader :volume_groups
     attr_reader :physical_volumes
+    attr_reader :disks
 
     VALID_OPTIONS   = [
         :command,
@@ -46,24 +50,25 @@ module LVM
       if @command == DEFAULT_COMMAND
         options[:command] = DEFAULT_COMMAND
       end
+      @options = options
 
 
       # default to loading attributes for the current version
       options[:version] ||= VERSION
       options[:debug]   ||= false
 
-      @logical_volumes  = LogicalVolumes.new(options)
-      @volume_groups    = VolumeGroups.new(options)
-      @physical_volumes = PhysicalVolumes.new(options)
+      @disks = Disks.new(@options)
+      @physical_volumes = PhysicalVolumes.new(@options)
+      @volume_groups = VolumeGroups.new(@options)
+      @logical_volumes = LogicalVolumes.new(@options)
+
 
       if block_given?
         yield self
       else
         return self
       end
-    end
-
-    # end initialize
+    end # end initialize
 
 
     def raw(args)
