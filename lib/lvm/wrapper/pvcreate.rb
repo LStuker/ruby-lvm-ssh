@@ -3,7 +3,7 @@ require 'lvm/wrapper/pvs'
 
 module LVM
   module Wrapper
-    module PVCreate
+    module PVcreate
 
       # Create a LVM Physical Volume out of a device
       # if fdisk does not find a partition on the disk and
@@ -22,14 +22,16 @@ module LVM
       def pv_check_device(devicename)
         External.cmd(@server, "#{@command} pvscan #{devicename}").include? "No matching physical volumes found"
       end
-      module_function :checkDeviceOnPV
+
+      module_function :pv_check_device
 
       # Check with fdsik if there is a partition on the device
       def partition_check_device(devicename)
         External.cmd(@server, "/usr/bin/sudo /sbin/fdisk -l #{devicename}").include? "Disk #{devicename} doesn't contain a valid partition table"
       end
-      module_function :checkDeviceOnPartition
 
-    end # module PVCREATE
+      module_function :partition_check_device
+
+    end # module PVcreate
   end # module Wrapper
 end # module LVM
