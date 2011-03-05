@@ -5,11 +5,10 @@ module LVM
   module Wrapper
     module VGRename
 
-      # Create a LVM Physical Volume out of a device
-      # if fdisk does not find a partition on the disk and
-      # if pvscan does not find an existing physical volume label
-      def vg_rename(uuid, vgname)
-        External.cmd(@server, "#{@command} vgrename #{uuid} #{vgname}")
+      # Rename a LVM Volume Group.
+      # See vor vgrename command http://linux.die.net/man/8/vgrename
+      def vg_rename(volume_group, volume_group_name)
+        External.cmd(@server, "#{@command} vgrename #{volume_group.uuid} #{volume_group_name}")
       end
 
 
