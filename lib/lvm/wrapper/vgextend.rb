@@ -3,16 +3,14 @@ require 'lvm/wrapper/pvs'
 
 module LVM
   module Wrapper
-    module VGextend
+    module VGExtend
 
-      # Create a LVM Physical Volume out of a device
-      # if fdisk does not find a partition on the disk and
-      # if pvscan does not find an existing physical volume label
-      def vg_extend(vgname, pvpath)
-        External.cmd(@server, "#{@command} vgextend #{vgname} #{pvpath}")
+      # Extend a LVM Volume Group.
+      # See vor vgextend command http://linux.die.net/man/8/vgextend
+      def vg_extend(volume_group, physical_volumes)
+        External.cmd(@server, "#{@command} vgextend #{volume_group.name} #{physical_volumes.to_s}") if physical_volumes_unused(physical_volumes)
       end
 
-
-    end # module VGextend
+    end # module VGExtend
   end # module Wrapper
 end # module LVM
