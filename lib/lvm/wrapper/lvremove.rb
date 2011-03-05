@@ -3,16 +3,16 @@ require 'lvm/wrapper/pvs'
 
 module LVM
   module Wrapper
-    module PVRename
+    module LVRemove
 
-      # Create a LVM Physical Volume out of a device
-      # if fdisk does not find a partition on the disk and
-      # if pvscan does not find an existing physical volume label
-      def vg_rename(uuid, vgname)
-        External.cmd(@server, "#{@command} vgrename #{uuid} #{vgname}")
+      # Remove a LVM Logical Volume.
+      # See vor lvremove command http://linux.die.net/man/8/lvremove
+      # -f eq. --force
+      def lv_remove(logical_volume)
+        External.cmd(@server, "#{@command} lvremove -f #{logical_volume.name}")
       end
 
 
-    end # module PVCREATE
+    end # module LVRemove
   end # module Wrapper
 end # module LVM
