@@ -16,7 +16,7 @@ module LVM
       end
 
       def list
-        output = External.cmd(@server, "dmesg | grep \"SCSI device\" | uniq")
+        output = get_disk_from_dmesg()
         data   = parse(output)
 
         if block_given?
@@ -26,7 +26,11 @@ module LVM
         end
       end
 
-      private
+     # private
+
+      def get_disk_from_dmesg
+        External.cmd(@server, "dmesg | grep \"SCSI device\" | uniq")
+      end
 
       # Parses the output of self.command
       def parse(output)
