@@ -1,36 +1,18 @@
-= ruby-lvm
-
-* http://ruby-lvm.rubyforge.org
-* mailto:mkent@magoazul.com
+= ruby-lvm-ssh
 
 == DESCRIPTION:
 
-This is a wrapper for the LVM2 administration utility, lvm. Its primary
-function it to convert physical volumes, logical volumes and volume groups
-into easy to use ruby objects. It also provides a simple wrapper for typical
-create/delete/etc operations.
+This is a force from the orgin project ruby-lvm and ruby-lvm-attributes
+by Matthew Kent http://ruby-lvm.rubyforge.org.
+The diffrents the the orgin progject are, that the lvm commands can be
+made over ssh with sudo and wrappers for create/delete/etc oprationes.
 
-Due to a lack of LVM2 api this is a best effort attempt at ruby integration but
-subject to complete replacement in the future.
+The primary function to convert Linux LVM2 physical volumes, logical volumes and
+volume groups into easy to use ruby objects are still into this project.
 
 == FEATURES/PROBLEMS:
 
-* Exposes all possible data from the lvs/vgs/pvs commands. Data is grouped
-  sensibly (I hope).
-* Doesn't nicely wrap creation/deletion/etc operations, they must be created
-  by hand and passed as raw commands.
-
-== SYNOPSIS:
-
-  require 'lvm'
-
-  LVM::LVM.new({:command => "/usr/bin/sudo /sbin/lvm"}) do |lvm|
-    puts "lvm version: #{lvm.version}\n"
-
-    lvm.volume_groups.each do |vg|
-      puts "vg: #{vg.name}"
-    end
-  end
+* The project is still in prototyp status.
 
 == REQUIREMENTS:
 
@@ -39,12 +21,11 @@ subject to complete replacement in the future.
 
 == INSTALL:
 
-* sudo gem install ruby-lvm 
+Still prototyp status
 
 == FEEDBACK:
 
-Please feel free to submit patches or constructive criticism, I'm still pretty
-new to ruby and object oriented programming in general.
+Please feel free to submit patches or constructive criticism.
 
 == LICENSE:
 
