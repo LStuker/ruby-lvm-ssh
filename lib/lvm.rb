@@ -6,6 +6,14 @@ require 'lvm/volume_groups'
 require 'lvm/logical_volumes'
 require 'lvm/wrapper/pvcreate'
 require 'lvm/wrapper/pvremove'
+require 'lvm/wrapper/vgcreate'
+require 'lvm/wrapper/vgrename'
+require 'lvm/wrapper/vgremove'
+require 'lvm/wrapper/vgextend'
+require 'lvm/wrapper/lvcreate'
+require 'lvm/wrapper/lvrename'
+require 'lvm/wrapper/lvremove'
+require 'lvm/wrapper/lvextend'
 
 
 
@@ -14,8 +22,16 @@ module LVM
 
   class LVM
 
-    include Wrapper::PVcreate
-    include Wrapper::PVremove
+    include Wrapper::PVCreate
+    include Wrapper::PVRemove
+    include Wrapper::VGCreate
+    include Wrapper::VGRename
+    include Wrapper::VGRemove
+    include Wrapper::VGExtend
+    include Wrapper::LVCreate
+    include Wrapper::LVRename
+    include Wrapper::LVRemove
+    include Wrapper::LVExtend
 
 
     attr_reader :command
